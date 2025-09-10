@@ -6,6 +6,22 @@ const App = () => {
   const [Url, setUrl] = useState("");
   const [Image, setImage] = useState("");
   const [Color, setColor] = useState("#000000");
+  const handleShare = async (url, image) => {
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: 'QR Code',
+        text: 'Check out this QR code I generated!',
+        url: url || window.location.href, 
+      });
+    } else {
+      alert("Sharing not supported on this browser. Copy the link instead.");
+    }
+  } catch (error) {
+    console.error("Error sharing:", error);
+  }
+};
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -53,6 +69,13 @@ const App = () => {
           />
         ) : null}
       </div>
+      <button
+        onClick={() => handleShare(Url, Image)}
+        className="share-btn"
+      >
+        Share QR Code
+      </button>
+
     </>
   );
 };
